@@ -32,9 +32,9 @@ for port in range(port_min, port_max + 1):
             s.connect((ip_add_entered, port))
             open_ports.append(port)
     except:
-        print(f"Could not connect to : {port}
+        print(f"Could not connect to : {port}")
 
-print(f"Closed ports on {ip_add_entered} : ", int(port_max-port_min-1)-len(open_ports))
+print(f"Closed ports on {ip_add_entered} : ", int(port_max-port_min + 1)-len(open_ports))
 print(f"Open   ports on {ip_add_entered} : ", len(open_ports))
 for outp in open_ports:
     print(outp)
