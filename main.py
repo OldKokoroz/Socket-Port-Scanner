@@ -9,9 +9,9 @@ port_max = 65535
 open_ports = []
 
 while True:
-    ip_add_entered = input("\nPlease enter the ip address that you want to scan: ")
+    ip_add_entered = input("\nEnter the Ip Address : ")
     if ip_add_pattern.search(ip_add_entered):
-        print(f"\n{ip_add_entered} is a valid ip address")
+        print(f"\n{ip_add_entered} is valid")
         break
 
 while True:
