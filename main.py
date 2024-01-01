@@ -11,7 +11,7 @@ open_ports = []
 while True:
     ip_add_entered = input("\nPlease enter the ip address that you want to scan: ")
     if ip_add_pattern.search(ip_add_entered):
-        print(f"{ip_add_entered} is a valid ip address")
+        print(f"\n{ip_add_entered} is a valid ip address")
         break
 
 while True:
@@ -34,6 +34,7 @@ for port in range(port_min, port_max + 1):
     except:
         pass
 
-print(f"Open ports on {ip_add_entered} :")
-for port in open_ports:
-    print(port)
+print(f"Closed ports on {ip_add_entered} : ", int(port_max-port_min-1)-len(open_ports))
+print(f"Open   ports on {ip_add_entered} : ", len(open_ports))
+for outp in open_ports:
+    print(outp)
