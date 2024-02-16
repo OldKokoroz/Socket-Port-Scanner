@@ -16,7 +16,7 @@ while True:
 
 while True:
     port_range = input("""
-    Range of ports you want to scan : <int>-<int>\n
+    Range of ports you want to scan : 0-1000\n
     Enter port range : """)
 
     port_range_valid = port_range_pattern.search(port_range.replace(" ", " "))
