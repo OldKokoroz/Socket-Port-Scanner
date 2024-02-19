@@ -16,25 +16,38 @@ while True:
 
 while True:
     port_range = input("""
-    Range of ports you want to scan : 0-1000\n
+    Range of ports you want to scan : <int>-<int>\n
     Enter port range : """)
-
-    port_range_valid = port_range_pattern.search(port_range.replace(" ", ""))
+    
+    scan_type = input("""
+Scan Type
+1 - Fast [Default]   2 - Mid   3 - Detailed
+""")
+    out_time = 1
+    port_range_valid = port_range_pattern.search(port_range.replace(" ", " "))
     if port_range_valid:
         port_min = int(port_range_valid.group(1))
         port_max = int(port_range_valid.group(2))
         break
 
 for port in range(port_min, port_max + 1):
+    if scan_type == "1":
+        out_time = 1
+    elif scan_type == "2":
+        out_time = 5
+    elif scan_type == "3":
+        out_time = 10
+    
     try:
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.settimeout(1)
+            s.settimeout(out_time)
             s.connect((ip_add_entered, port))
             open_ports.append(port)
     except:
         print(f"Could not connect to : {port}")
+        break
 
 print(f"Closed ports on {ip_add_entered} : ", int(port_max-port_min + 1)-len(open_ports))
 print(f"Open   ports on {ip_add_entered} : ", len(open_ports))
-for outp in open_ports:
-    print(outp)
+for output in open_ports:
+    print(output)
