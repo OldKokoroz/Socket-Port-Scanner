@@ -1,5 +1,9 @@
-import socket
 import re
+import sys
+import socket
+import subprocess
+from time import localtime, strftime
+
 
 ip_add_pattern = re.compile("^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
 port_range_pattern = re.compile("([0-9]+)-([0-9]+)")
@@ -7,47 +11,93 @@ port_min = 0
 port_max = 65535
 
 open_ports = []
+closed_ports = []
 
+# -------------------
+open_ports.clear()
+closed_ports.clear()
+# -------------------
+
+print("-" * 75)
 while True:
-    ip_add_entered = input("\nEnter the Ip Address : ")
+    at_first = input("""
+Do you know the IP ?
+    1 - Yes
+    2 - No; Ping the domain
+    
+|-> """)
+    if at_first == "2":
+        dom = input("\nDomain: ")
+        check = subprocess.run(f"ping -c 5 {dom}", shell=True, capture_output=True, text=True)
+
+        print("\n" + check.stdout)
+
+    ip_add_entered = input("""\nEnter the Ip Address: """)
     if ip_add_pattern.search(ip_add_entered):
         print(f"\n{ip_add_entered} is valid")
         break
 
 while True:
     port_range = input("""
-    Range of ports you want to scan : <int>-<int>\n
-    Enter port range : """)
-    
-    scan_type = input("""
-Scan Type
-1 - Fast [Default]   2 - Mid   3 - Detailed
-""")
-    out_time = 1
-    port_range_valid = port_range_pattern.search(port_range.replace(" ", " "))
-    if port_range_valid:
-        port_min = int(port_range_valid.group(1))
-        port_max = int(port_range_valid.group(2))
-        break
+    Range of ports you want to scan: 1-1000\n
+    Enter port range: """)
 
-for port in range(port_min, port_max + 1):
+    scan_type = input("""
+Scan Type:
+    1 - Fast [Default]
+    2 - Mid   
+    3 - Detailed
+    
+|-> """)
     if scan_type == "1":
         out_time = 1
     elif scan_type == "2":
         out_time = 5
     elif scan_type == "3":
         out_time = 10
-    
-    try:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.settimeout(out_time)
-            s.connect((ip_add_entered, port))
-            open_ports.append(port)
-    except:
-        print(f"Could not connect to : {port}")
+    else:  # incase nothing is entered
+        out_time = 1
+
+    port_range_valid = port_range.strip().split("-")
+
+    if port_range_valid:
+        port_min = int(port_range_valid[0])
+        port_max = int(port_range_valid[1])
+
+        port_list = range(port_min, port_max + 1)
         break
 
-print(f"Closed ports on {ip_add_entered} : ", int(port_max-port_min + 1)-len(open_ports))
-print(f"Open   ports on {ip_add_entered} : ", len(open_ports))
-for output in open_ports:
-    print(output)
+
+def sock_con(ip, port_1, timee):
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.settimeout(timee)
+        s.connect((ip, port_1))
+
+
+for port in port_list:
+    try:
+        sock_con(ip_add_entered, port, out_time)
+        open_ports.append(str(port))
+
+    except KeyboardInterrupt:
+        print("\nExiting Program !!!!")
+        sys.exit(0)
+    except socket.gaierror:
+        print("\nHostname Could Not Be Resolved !!!!")
+        sys.exit(1)
+    except socket.error:
+        closed_ports.append(str(port))
+
+
+with open(f"{ip_add_entered}.txt", "a") as log:
+
+    log.writelines(f"""\n{"-" * 75 + strftime("%d.%m.%Y - %H:%M:%S", localtime())}
+Open ports on {ip_add_entered} : 
+    {open_ports}
+\n\n
+Closed ports on {ip_add_entered} : 
+    {closed_ports}
+{"-" * 75}
+""")
+
+print("-" * 75)
