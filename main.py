@@ -49,6 +49,7 @@ Scan Type:
     3 - Detailed
     
 |-> """)
+    
     if scan_type == "1":
         out_time = 1
     elif scan_type == "2":
@@ -82,9 +83,11 @@ for port in port_list:
     except KeyboardInterrupt:
         print("\nExiting Program !!!!")
         sys.exit(0)
+        
     except socket.gaierror:
         print("\nHostname Could Not Be Resolved !!!!")
         sys.exit(1)
+        
     except socket.error:
         closed_ports.append(str(port))
 
@@ -97,7 +100,6 @@ Open ports on {ip_add_entered} :
 \n\n
 Closed ports on {ip_add_entered} : 
     {closed_ports}
-{"-" * 75}
-""")
+{"-" * 75} """)
 
 print("-" * 75)
