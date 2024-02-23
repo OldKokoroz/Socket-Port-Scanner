@@ -1,5 +1,5 @@
 import re
-import sys
+import os
 import socket
 import subprocess
 from time import localtime, strftime
@@ -18,7 +18,8 @@ open_ports.clear()
 closed_ports.clear()
 # -------------------
 
-print("-" * 75)
+print("=" * 75)
+
 while True:
     at_first = input("""
 Do you know the IP ?
@@ -26,6 +27,7 @@ Do you know the IP ?
     2 - No; Ping the domain
     
 |-> """)
+
     if at_first == "2":
         dom = input("\nDomain: ")
         check = subprocess.run(f"ping -c 5 {dom}", shell=True, capture_output=True, text=True)
@@ -49,7 +51,7 @@ Scan Type:
     3 - Detailed
     
 |-> """)
-    
+
     if scan_type == "1":
         out_time = 1
     elif scan_type == "2":
@@ -82,24 +84,23 @@ for port in port_list:
 
     except KeyboardInterrupt:
         print("\nExiting Program !!!!")
-        sys.exit(0)
-        
+        exit(0)
     except socket.gaierror:
         print("\nHostname Could Not Be Resolved !!!!")
-        sys.exit(1)
-        
+        exit(1)
     except socket.error:
         closed_ports.append(str(port))
 
 
 with open(f"{ip_add_entered}.txt", "a") as log:
 
-    log.writelines(f"""\n{"-" * 75 + strftime("%d.%m.%Y - %H:%M:%S", localtime())}
-Open ports on {ip_add_entered} : 
+    log.writelines(f"""\n\n\n{strftime("%d.%m.%Y - %H:%M:%S", localtime())}{" " * 51}{os.getuid()}\n{"=" * 75}
+{len(open_ports)}   Open ports on {ip_add_entered} : 
     {open_ports}
 \n\n
-Closed ports on {ip_add_entered} : 
+{len(closed_ports)}  Closed ports on {ip_add_entered} : 
     {closed_ports}
-{"-" * 75} """)
+{"=" * 75}
+""")
 
-print("-" * 75)
+print("=" * 75)
