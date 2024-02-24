@@ -12,6 +12,7 @@ port_max = 65535
 
 open_ports = []
 closed_ports = []
+out_time = 1  # default value
 
 # -------------------
 open_ports.clear()
@@ -58,8 +59,6 @@ Scan Type:
         out_time = 5
     elif scan_type == "3":
         out_time = 10
-    else:  # incase nothing is entered
-        out_time = 1
 
     port_range_valid = port_range.strip().split("-")
 
