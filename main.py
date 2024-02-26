@@ -2,6 +2,7 @@ import re
 import os
 import socket
 import subprocess
+from database import ports_dict
 from time import localtime, strftime
 
 
@@ -10,13 +11,12 @@ port_range_pattern = re.compile("([0-9]+)-([0-9]+)")
 port_min = 0
 port_max = 65535
 
-open_ports = []
-closed_ports = []
-out_time = 1  # default value
-
 # -------------------
-open_ports.clear()
-closed_ports.clear()
+out_time = 1  # default value
+open_ports = ""
+closed_ports = ""
+counter1 = 0
+counter2 = 0
 # -------------------
 
 print("=" * 75)
@@ -70,6 +70,7 @@ Scan Type:
         break
 
 
+
 def sock_con(ip, port_1, timee):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.settimeout(timee)
@@ -79,27 +80,33 @@ def sock_con(ip, port_1, timee):
 for port in port_list:
     try:
         sock_con(ip_add_entered, port, out_time)
-        open_ports.append(str(port))
+        open_ports += f"\n {port}     : {str(ports_dict.get(port))}"
+        counter1 += 1
 
     except KeyboardInterrupt:
         print("\nExiting Program !!!!")
         exit(0)
+
     except socket.gaierror:
         print("\nHostname Could Not Be Resolved !!!!")
         exit(1)
+
     except socket.error:
-        closed_ports.append(str(port))
+        closed_ports += f"\n {port}     : {str(ports_dict.get(port))}"
+        counter2 += 1
 
 
 with open(f"{ip_add_entered}.txt", "a") as log:
 
     log.writelines(f"""\n\n\n{strftime("%d.%m.%Y - %H:%M:%S", localtime())}{" " * 51}{os.getuid()}\n{"=" * 75}
-{len(open_ports)}   Open ports on {ip_add_entered} : 
+{counter1}   Open ports on {ip_add_entered} : 
     {open_ports}
 \n\n
-{len(closed_ports)}  Closed ports on {ip_add_entered} : 
+{counter2}  Closed ports on {ip_add_entered} : 
     {closed_ports}
 {"=" * 75}
 """)
 
 print("=" * 75)
+
+
