@@ -5,10 +5,9 @@ import subprocess
 from database import ports_dict
 from time import localtime, strftime
 
-
 ip_add_pattern = re.compile("^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
 port_range_pattern = re.compile("([0-9]+)-([0-9]+)")
-port_min = 0
+port_min = 1
 port_max = 65535
 
 # -------------------
@@ -26,7 +25,7 @@ while True:
 Do you know the IP ?
     1 - Yes
     2 - No; Ping the domain
-    
+
 |-> """)
 
     if at_first == "2":
@@ -50,7 +49,7 @@ Scan Type:
     1 - Fast [Default]
     2 - Mid   
     3 - Detailed
-    
+
 |-> """)
 
     if scan_type == "1":
@@ -70,7 +69,6 @@ Scan Type:
         break
 
 
-
 def sock_con(ip, port_1, timee):
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.settimeout(timee)
@@ -80,7 +78,7 @@ def sock_con(ip, port_1, timee):
 for port in port_list:
     try:
         sock_con(ip_add_entered, port, out_time)
-        open_ports += f"\n {port}     : {str(ports_dict.get(port))}"
+        open_ports += f"\n {port}      : {str(ports_dict.values(port))}"
         counter1 += 1
 
     except KeyboardInterrupt:
@@ -92,12 +90,10 @@ for port in port_list:
         exit(1)
 
     except socket.error:
-        closed_ports += f"\n {port}     : {str(ports_dict.get(port))}"
+        closed_ports += f"\n {port}      : {str(ports_dict.values(port))}"
         counter2 += 1
 
-
 with open(f"{ip_add_entered}.txt", "a") as log:
-
     log.writelines(f"""\n\n\n{strftime("%d.%m.%Y - %H:%M:%S", localtime())}{" " * 51}{os.getuid()}\n{"=" * 75}
 {counter1}   Open ports on {ip_add_entered} : 
     {open_ports}
@@ -108,5 +104,3 @@ with open(f"{ip_add_entered}.txt", "a") as log:
 """)
 
 print("=" * 75)
-
-
