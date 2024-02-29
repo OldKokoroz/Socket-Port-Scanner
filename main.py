@@ -5,13 +5,13 @@ import subprocess
 from database import ports_dict
 from time import localtime, strftime
 
+# ------------------> default values
 ip_add_pattern = re.compile("^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
 port_range_pattern = re.compile("([0-9]+)-([0-9]+)")
 ip_add_entered = ""
 port_min = 1
 port_max = 65535
 
-# ------------------> default values
 out_time = 1
 open_ports = ""
 counter1 = 0  # for open ports
