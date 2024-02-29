@@ -7,16 +7,30 @@ from time import localtime, strftime
 
 ip_add_pattern = re.compile("^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
 port_range_pattern = re.compile("([0-9]+)-([0-9]+)")
+ip_add_entered = ""
 port_min = 1
 port_max = 65535
 
-# -------------------
-out_time = 1  # default value
+# ------------------> default values
+out_time = 1
 open_ports = ""
-closed_ports = ""
-counter1 = 0
-counter2 = 0
+counter1 = 0  # for open ports
+counter2 = 0  # for closed ports
 # -------------------
+
+
+def catch_dom():
+    dom = input("\nDomain: ")
+    check = subprocess.run(f"ping -c 5 {dom}", shell=True, capture_output=True, text=True)
+    print("\n" + check.stdout)
+
+
+def sock_search():
+    global ip_add_entered
+    ip_add_entered = input("""\nEnter the Ip Address: """)
+    if ip_add_pattern.search(ip_add_entered):
+        print(f"\n{ip_add_entered} is valid")
+
 
 print("=" * 75)
 
@@ -28,16 +42,17 @@ Do you know the IP ?
 
 |-> """)
 
-    if at_first == "2":
-        dom = input("\nDomain: ")
-        check = subprocess.run(f"ping -c 5 {dom}", shell=True, capture_output=True, text=True)
-
-        print("\n" + check.stdout)
-
-    ip_add_entered = input("""\nEnter the Ip Address: """)
-    if ip_add_pattern.search(ip_add_entered):
-        print(f"\n{ip_add_entered} is valid")
+    if at_first == "1":
+        sock_search()
         break
+
+    elif at_first == "2":
+        catch_dom()
+        sock_search()
+        break
+
+    else:
+        print("Invalid Choice!")
 
 while True:
     port_range = input("""
@@ -78,7 +93,7 @@ def sock_con(ip, port_1, timee):
 for port in port_list:
     try:
         sock_con(ip_add_entered, port, out_time)
-        open_ports += f"\n {port}      : {str(ports_dict.values(port))}"
+        open_ports += f"\n {port}      : {str(ports_dict.get(port))}"
         counter1 += 1
 
     except KeyboardInterrupt:
@@ -90,17 +105,19 @@ for port in port_list:
         exit(1)
 
     except socket.error:
-        closed_ports += f"\n {port}      : {str(ports_dict.values(port))}"
         counter2 += 1
 
+
+#  Saving the log to a file
 with open(f"{ip_add_entered}.txt", "a") as log:
-    log.writelines(f"""\n\n\n{strftime("%d.%m.%Y - %H:%M:%S", localtime())}{" " * 51}{os.getuid()}\n{"=" * 75}
+    log.writelines(f"""\n\n\n\n{strftime("%d.%m.%Y - %H:%M:%S", localtime())}{" " * 34} Port Range: {port_min}-{port_max}\n{"=" * 75}
+{counter2}   Ports are closed on {ip_add_entered}\n
 {counter1}   Open ports on {ip_add_entered} : 
     {open_ports}
-\n\n
-{counter2}  Closed ports on {ip_add_entered} : 
-    {closed_ports}
+\n
 {"=" * 75}
 """)
 
 print("=" * 75)
+
+#  To be continued
