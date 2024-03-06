@@ -1,12 +1,11 @@
 import re
-import os
 import socket
 import subprocess
 from database import ports_dict
 from time import localtime, strftime
 
 # ------------------> default values
-ip_add_pattern = re.compile("^(?:[0-9]{1,3}\.){3}[0-9]{1,3}$")
+ip_add_pattern = re.compile("^(?:[0-9]{1,3}\\.){3}[0-9]{1,3}$")
 port_range_pattern = re.compile("([0-9]+)-([0-9]+)")
 ip_add_entered = ""
 port_min = 1
