@@ -19,7 +19,7 @@ counter2 = 0  # for closed ports
 
 
 def catch_dom():
-    dom = input("\nDomain: ")
+    dom = input("\nDomain or Device Name: ")
     check = subprocess.run(f"ping -c 5 {dom}", shell=True, capture_output=True, text=True)
     print("\n" + check.stdout)
 
@@ -92,7 +92,7 @@ def sock_con(ip, port_1, timee):
 for port in port_list:
     try:
         sock_con(ip_add_entered, port, out_time)
-        open_ports += f"\n {port}      : {str(ports_dict.get(port))}"
+        open_ports += f"\n {port}      : {ports_dict.get(port)}"
         counter1 += 1
 
     except KeyboardInterrupt:
