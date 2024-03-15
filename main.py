@@ -101,11 +101,11 @@ class Deus:
 
         while True:
             at_first = input("""
-        Do you know the IP ?
-            1 - Yes
-            2 - No; Ping the domain
+Do you know the IP ?
+    1 - Yes
+    2 - No; Ping the domain
 
-        |-> """)
+|-> """)
 
             if at_first == "1":
                 self.sock_search()
@@ -121,16 +121,16 @@ class Deus:
 
         while True:
             self.port_range = input("""
-            Range of ports you want to scan: 1-1000\n
-            Enter port range: """)
+Range of ports you want to scan: 1-1000\n
+Enter port range: """)
 
             self.scan_type = input("""
         Scan Type:
-            1 - Fast [Default]
-            2 - Mid   
-            3 - Detailed
+1 - Fast [Default]
+2 - Mid   
+3 - Detailed
 
-        |-> """)
+|-> """)
 
             if self.scan_type == "1":
                 self.out_time = 1
