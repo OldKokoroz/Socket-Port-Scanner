@@ -29,22 +29,34 @@ class Deus:
         
 
     def catch_dom(self) -> None:
-        dom = input("\nDomain or Device Name: ")
-        check = subprocess.run(f"ping -c 5 {dom}", shell=True, capture_output=True, text=True)
-        print("\n" + check.stdout)
+        try:
+            dom = input("\nDomain or Device Name: ")
+            check = subprocess.run(f"ping -c 5 {dom}", shell=True, capture_output=True, text=True)
+            print("\n" + check.stdout)
 
+        except KeyboardInterrupt:
+            print("Quitting!")
+            exit(0)
 
     def sock_search(self) -> None:
-        self.ip_add_entered = input("""\nEnter the Ip Address: """)
-        if self.ip_add_pattern.search(self.ip_add_entered):
-            print(f"\n{self.ip_add_entered} is valid")
+        try:
+            self.ip_add_entered = input("""\nEnter the Ip Address: """)
+            if self.ip_add_pattern.search(self.ip_add_entered):
+                print(f"\n{self.ip_add_entered} is valid")
 
+        except KeyboardInterrupt:
+            print("Quitting!")
+            exit(0)
 
     def sock_con(self, ip, port1, timee) -> None:
-        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-            s.settimeout(timee)
-            s.connect((ip, port1))
-    
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                s.settimeout(timee)
+                s.connect((ip, port1))
+
+        except KeyboardInterrupt:
+            print("Quitting!")
+            exit(0)
 
     def con_loop(self) -> None:
         self.port_range_valid = self.port_range.strip().split("-")
