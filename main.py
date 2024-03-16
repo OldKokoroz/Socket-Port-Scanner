@@ -30,12 +30,28 @@ class Deus:
 
     def catch_dom(self) -> None:
         try:
-            dom = input("\nDomain or Device Name: ")
-            check = subprocess.run(f"ping -c 3 {dom}", shell=True, capture_output=True, text=True)
-            print("\n" + check.stdout)
+            dom = input("""\n
+1 - Domain 
+2 - Host Name
+
+|-> """)
+        
+            if dom == "1":
+                domain = input("Domain: ")
+
+                check = subprocess.run(f"ping -c 3 {domain}", shell=True, capture_output=True, text=True)
+                print("\n" + check.stdout)
+            
+            if dom == "2":
+                hostname = input("""
+===== Device Must Be On The Same Network =====
+Hostname: """)
+                
+                check = subprocess.run(f"nslookup {hostname}", shell=True, capture_output=True, text=True)
+                print("\n" + check.stdout)
 
         except KeyboardInterrupt:
-            print("Quitting!")
+            print("\nQuitting!")
             exit(0)
 
     def sock_search(self) -> None:
@@ -45,7 +61,7 @@ class Deus:
                 print(f"\n{self.ip_add_entered} is valid")
 
         except KeyboardInterrupt:
-            print("Quitting!")
+            print("\nQuitting!")
             exit(0)
 
     def sock_con(self, ip, port1, timee) -> None:
@@ -55,7 +71,7 @@ class Deus:
                 s.connect((ip, port1))
 
         except KeyboardInterrupt:
-            print("Quitting!")
+            print("\nQuitting!")
             exit(0)
 
     def con_loop(self) -> None:
@@ -86,13 +102,15 @@ class Deus:
     
 
     def saver(self) -> None:
-        with open(f"{self.ip_add_entered}.txt", "a") as log:
-            log.writelines(f"""{"\n" * 4}{strftime("%d.%m.%Y - %H:%M:%S", localtime())}{" " * 34} Port Range: {self.port_min}-{self.port_max}\n{"=" * 75}
+        message = f"""\n\n\n{strftime("%d.%m.%Y - %H:%M:%S", localtime())}{" " * 34} Port Range: {self.port_min}-{self.port_max}\n{"=" * 75}
 {self.counter2}   Ports are closed on {self.ip_add_entered}\n
 {self.counter1}   Open ports on {self.ip_add_entered} : 
         {self.open_ports}
-        \n
-{"=" * 75}""")
+\n
+{"=" * 75}"""
+        
+        with open(f"{self.ip_add_entered}.txt", "a") as log:
+            log.writelines(message)
     
 
     def starter(self):
@@ -125,10 +143,10 @@ Range of ports you want to scan: 1-1000\n
 Enter port range: """)
 
             self.scan_type = input("""
-        Scan Type:
-1 - Fast [Default]
-2 - Mid   
-3 - Detailed
+Scan Type:
+    1 - Fast [Default]
+    2 - Mid   
+    3 - Detailed
 
 |-> """)
 
