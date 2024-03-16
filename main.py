@@ -16,16 +16,16 @@ class Deus:
                 open_ports = "",
                 counter1 = 0,
                 counter2 = 0) -> None:
-        
-        self.ip_add_pattern = ip_add_pattern
-        self.ip_add_entered = ip_add_entered
-        self.port_range_pattern = port_range_pattern
+    
         self.port_min = port_min
         self.port_max = port_max
         self.out_time = out_time
-        self.open_ports = open_ports
         self.counter1 = counter1  # for open ports
         self.counter2 = counter2  # for closed ports
+        self.open_ports = open_ports
+        self.ip_add_pattern = ip_add_pattern
+        self.ip_add_entered = ip_add_entered
+        self.port_range_pattern = port_range_pattern
         
 
     def catch_dom(self) -> None:
