@@ -13,7 +13,7 @@ class Deus:
                 port_min = 1,
                 port_max = 65535,
                 out_time = 1,
-                open_ports = "",
+                open_ports = "\n",
                 counter1 = 0,
                 counter2 = 0) -> None:
     
@@ -31,7 +31,7 @@ class Deus:
     def catch_dom(self) -> None:
         try:
             dom = input("\nDomain or Device Name: ")
-            check = subprocess.run(f"ping -c 5 {dom}", shell=True, capture_output=True, text=True)
+            check = subprocess.run(f"ping -c 3 {dom}", shell=True, capture_output=True, text=True)
             print("\n" + check.stdout)
 
         except KeyboardInterrupt:
@@ -70,7 +70,7 @@ class Deus:
         for port in self.port_list:
             try:
                 self.sock_con(self.ip_add_entered, port, self.out_time)
-                open_ports += f"\n {port}      : {ports_dict.get(port)}"
+                open_ports += f" {port}      : {ports_dict.get(port)}\n"
                 self.counter1 += 1
 
             except KeyboardInterrupt:
@@ -87,7 +87,7 @@ class Deus:
 
     def saver(self) -> None:
         with open(f"{self.ip_add_entered}.txt", "a") as log:
-            log.writelines(f"""\n\n\n\n{strftime("%d.%m.%Y - %H:%M:%S", localtime())}{" " * 34} Port Range: {self.port_min}-{self.port_max}\n{"=" * 75}
+            log.writelines(f"""{"\n" * 4}{strftime("%d.%m.%Y - %H:%M:%S", localtime())}{" " * 34} Port Range: {self.port_min}-{self.port_max}\n{"=" * 75}
 {self.counter2}   Ports are closed on {self.ip_add_entered}\n
 {self.counter1}   Open ports on {self.ip_add_entered} : 
         {self.open_ports}
