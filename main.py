@@ -40,15 +40,20 @@ class Deus:
                 domain = input("Domain: ")
 
                 check = subprocess.run(f"ping -c 3 {domain}", shell=True, capture_output=True, text=True)
-                print("\n" + check.stdout)
+                print(f"\n {check.stdout}")
             
             if dom == "2":
                 hostname = input("""
 ===== Device Must Be On The Same Network =====
 Hostname: """)
                 
-                check = subprocess.run(f"nslookup {hostname}", shell=True, capture_output=True, text=True)
-                print("\n" + check.stdout)
+                check1 = subprocess.run(f"nslookup {hostname}", shell=True, capture_output=True, text=True)
+                arp = subprocess.run(f"arp -a", shell=True, capture_output=True, text=True)
+                print("Couldn't find it? These are the devices on your network:")
+
+                print(f"\n{check1.stdout}")
+                print(f"\n{arp.stdout}")
+
 
         except KeyboardInterrupt:
             print("\nQuitting!")
