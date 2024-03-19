@@ -91,7 +91,7 @@ Hostname: """)
         for port in self.port_list:
             try:
                 self.sock_con(self.ip_add_entered, port, self.out_time)
-                open_ports += f" {port}      : {ports_dict.get(port)}\n"
+                self.open_ports += f"\t\t{port}\t\t: {ports_dict[port]}\n"
                 self.counter1 += 1
 
             except KeyboardInterrupt:
@@ -109,10 +109,9 @@ Hostname: """)
     def saver(self) -> None:
         message = f"""\n\n\n{strftime("%d.%m.%Y - %H:%M:%S", localtime())}{" " * 34} Port Range: {self.port_min}-{self.port_max}\n{"=" * 75}
 {self.counter2}   Ports are closed on {self.ip_add_entered}\n
-{self.counter1}   Open ports on {self.ip_add_entered} : 
-        {self.open_ports}
-\n
-{"=" * 75}"""
+{self.counter1}   Open ports on {self.ip_add_entered} :
+{self.open_ports}
+{"=" * 75}\n"""
         
         with open(f"{self.ip_add_entered}.txt", "a") as log:
             log.writelines(message)
