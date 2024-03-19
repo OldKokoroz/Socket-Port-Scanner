@@ -1,8 +1,8 @@
 import re
 import socket
 import subprocess
-from database import ports_dict
 from time import localtime, strftime
+from database import ports_dict, banner
 
 
 class Deus:
@@ -30,20 +30,20 @@ class Deus:
 
     def catch_dom(self) -> None:
         try:
-            dom = input("""\n
+            dom = input("""
 1 - Domain 
 2 - Host Name
 
 |-> """)
         
             if dom == "1":
-                domain = input("Domain: ")
+                domain = input("\nDomain: ")
 
                 check = subprocess.run(f"ping -c 3 {domain}", shell=True, capture_output=True, text=True)
                 print(f"\n {check.stdout}")
             
             if dom == "2":
-                hostname = input("""
+                hostname = input("""\n
 ===== Device Must Be On The Same Network =====
 Hostname: """)
                 
@@ -63,7 +63,7 @@ Hostname: """)
         try:
             self.ip_add_entered = input("""\nEnter the Ip Address: """)
             if self.ip_add_pattern.search(self.ip_add_entered):
-                print(f"\n{self.ip_add_entered} is valid")
+                print(f"\n{self.ip_add_entered} ✅")
 
         except KeyboardInterrupt:
             print("\nQuitting!")
@@ -119,17 +119,16 @@ Hostname: """)
     
 
     def starter(self):
-            
         print("=" * 75)
-
+        print(banner)
         while True:
             at_first = input("""
 Do you know the IP ?
     1 - Yes
-    2 - No; Ping the domain
+    2 - No, Ping the domain
 
 |-> """)
-
+            
             if at_first == "1":
                 self.sock_search()
                 break
@@ -140,17 +139,17 @@ Do you know the IP ?
                 break
 
             else:
-                print("Invalid Choice!")
+                print("\nInvalid Choice ❌")
 
         while True:
-            self.port_range = input("""
+            self.port_range = input("""\n
 Range of ports you want to scan: 1-1000\n
 Enter port range: """)
 
             self.scan_type = input("""
 Scan Type:
-    1 - Fast [Default]
-    2 - Mid   
+    1 - Fast 〥
+    2 - Mid  
     3 - Detailed
 
 |-> """)
@@ -164,7 +163,9 @@ Scan Type:
             elif self.scan_type == "3":
                 self.out_time = 10
                 break
-        
+
+            else:
+                print("\nInvalid Choice ❌")
 
         self.con_loop()
         self.saver()
