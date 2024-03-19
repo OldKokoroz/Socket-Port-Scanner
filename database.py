@@ -1,4 +1,8 @@
-# Ports and protocols
+# Banner, Ports and Protocols
+import pyfiglet
+
+banner = pyfiglet.figlet_format("PORT SCANNER")
+
 
 ports_dict = {"21": "FTP",
               "22": "SSH",
